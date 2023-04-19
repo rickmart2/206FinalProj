@@ -5,12 +5,14 @@ import os
 
 
 def collect_weather_data():
+    
+    chris_personal_key = 'P7VBY6VJVQZNFLJ8Y3D77HC6J'
     chris_cdogace_key = 'NKL9WMZAUEP446Q2TAL3GX7Z5'
     chris_umich_key = 'HZMD7PY4EZMQUUSWAUL5RJX4J'
     ricky_key = 'N2SH75WGJ6F9FS7VXMN4JLRMT'
     
 
-    base_url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/chicago/2022-04-07/2022-04-9?unitGroup=us&include=days&key={}&contentType=json"
+    base_url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/chicago/2022-04-07/2022-10-02?unitGroup=us&include=days&key={}&contentType=json"
     url = base_url.format(chris_umich_key)
     data = requests.get(url)
     data_dict = json.loads(data.text)
@@ -33,12 +35,10 @@ def collect_weather_data():
         cleaned_data_lst.append(desired_data)
         uniq_id += 1
     
-    print(cleaned_data_lst)
+    #print(cleaned_data_lst)
 
     return cleaned_data_lst
 
-
-# collect_weather_data()
 
 
 def construct_data_base(db_name):
@@ -48,8 +48,8 @@ def construct_data_base(db_name):
     return cur, conn
 
 def create_weather_table(weather_info_lst, cur, conn, index_start):
-    x = index_start
-    for dict_ in weather_info_lst[index_start:index_start+25]:
+    x = index_start    
+    for dict_ in weather_info_lst[index_start: index_start+25]:
         uniq = dict_['uniq_id']
 
         date = dict_['datetime']
@@ -64,26 +64,17 @@ def create_weather_table(weather_info_lst, cur, conn, index_start):
 
         visibility = dict_['visibility']
 
-        cur.execute("INSERT OR IGNORE INTO WeatherData (uniq, date, temp, feelslike, precip, windspeed, visibility) VALUES (?, ?, ?, ?, ?, ?, ?)", (uniq, date, temp, feelslike, precip, windspeed, visibility))
+        cur.execute("INSERT OR IGNORE INTO WeatherData (uniq, date, temp, feelslike, precip, windspeed, visibility) VALUES (?, ?, ?, ?, ?, ?, ?)", (x, date, temp, feelslike, precip, windspeed, visibility))
         conn.commit()
         x += 1
-    
-
-    # cur.execute("DROP TABLE IF EXISTS WeatherData")
-    # cur.execute("CREATE TABLE WeatherData (uniq INTEGER PRIMARY KEY, date INTEGER, temp REAL, feelslike REAL, precip REAL, windspeed REAL, visibility REAL)")
-    # for i in range(len(uniqs)):
-    #     cur.execute("INSERT OR IGNORE INTO WeatherData (uniq, date, temp, feelslike, precip, windspeed, visibility) VALUES (?, ?, ?, ?, ?, ?, ?)", (uniqs[i], dates[i], temps[i], feelslikes[i], precips[i], windspeeds[i], visibilitys[i]))
-    # conn.commit()
-    # x += 1
-
-    # index_start = uniqs[-1]
 
 
 
 def main():
     cur, conn = construct_data_base('proj.db')
-    cur.execute("DROP TABLE IF EXISTS WeatherData")
-    cur.execute("CREATE TABLE WeatherData (uniq INTEGER PRIMARY KEY, date INTEGER, temp REAL, feelslike REAL, precip REAL, windspeed REAL, visibility REAL)")
+    
+    cur.execute("CREATE TABLE IF NOT EXISTS WeatherData (uniq INTEGER PRIMARY KEY, date INTEGER, temp REAL, feelslike REAL, precip REAL, windspeed REAL, visibility REAL)")
+    cur.execute("SELECT max (uniq) from WeatherData")
 
     index_start = cur.fetchone()[0]
     print(index_start)
