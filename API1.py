@@ -58,19 +58,21 @@ def createMLBtab(cur, conn, lst, start):
 
 def main():
     cur, conn = setUpDb('proj.db')
-    cur.execute("DROP TABLE stadiums")
+
     cur.execute("CREATE TABLE IF NOT EXISTS stadiums (id NUMBER PRIMARY KEY, stadium TEXT)")
     cur.execute("CREATE TABLE IF NOT EXISTS Mlb (id NUMBER PRIMARY KEY, home_score NUMBER, away_score NUMBER, stadium NUMBER, date NUMBER)")
     cur.execute("SELECT max (id) from Mlb")
     
 
     start = cur.fetchone()[0]
-    print(start)
+    
     if start == None:
         start = 0
+    if start == 158:
+        print("All rows are added to the Database")
     print(start)
     createMLBtab(cur, conn, getMLBdata(), start)
-   #print(getMLBdata())
+
 if __name__ == "__main__":
     main()
 

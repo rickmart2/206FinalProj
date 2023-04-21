@@ -2,7 +2,7 @@ import sqlite3
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from textwrap import wrap
+
 
 def main():
     path = os.path.dirname(os.path.abspath(__file__))
@@ -31,7 +31,7 @@ def main():
 
     fig = plt.figure(figsize=(15,8))
     fig.subplots_adjust(hspace=0.5)
-    ax1 = fig.add_subplot(221)
+    ax1 = fig.add_subplot(223)
     cur.execute('SELECT date,home_score FROM Mlb where stadium = ?', (0, ))
     info = cur.fetchall()
     cur.execute("SELECT WeatherData.temp, Mlb.home_score, Mlb.away_score, Mlb.stadium from Mlb LEFT JOIN WeatherData ON Mlb.date = WeatherData.date where stadium = ?", (0, ))
@@ -50,7 +50,7 @@ def main():
     i = 1
     for date in info:
         days_into_season.append(i)
-        #lstx.append(date[1])
+
         i += 1
 
     x = days_into_season
@@ -79,7 +79,7 @@ def main():
     i2 = 1
     for date in info2:
         days_into_season2.append(i2)
-        #lstx2.append(date[1])
+
         i2 += 1
 
     x2 = days_into_season2
@@ -92,7 +92,7 @@ def main():
 
 # Visualization 2
 
-    # fig = plt.figure(figsize=(15,5))
+
     ax2 = fig.add_subplot(222)
     
     cur.execute("SELECT WeatherData.precip, Mlb.home_score, Mlb.away_score, Mlb.stadium from Mlb LEFT JOIN WeatherData ON Mlb.date = WeatherData.date where stadium = ?", (0, ))
@@ -145,8 +145,8 @@ def main():
 
 # Visualization 3
 
-    # fig = plt.figure(figsize=(15,5))
-    ax3 = fig.add_subplot(223)
+
+    ax3 = fig.add_subplot(221)
     
     cur.execute("SELECT WeatherData.windspeed, Mlb.home_score, Mlb.away_score, Mlb.stadium from Mlb LEFT JOIN WeatherData ON Mlb.date = WeatherData.date where stadium = ?", (0, ))
     vis3data = cur.fetchall()
@@ -198,7 +198,7 @@ def main():
 
 # Visualization 4
 
-    # fig = plt.figure(figsize=(15,5))
+
     ax4 = fig.add_subplot(224)
     
     cur.execute("SELECT WeatherData.feelslike, Mlb.home_score, Mlb.away_score, Mlb.stadium from Mlb LEFT JOIN WeatherData ON Mlb.date = WeatherData.date where stadium = ?", (0, ))

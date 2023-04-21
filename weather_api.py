@@ -14,10 +14,10 @@ def collect_weather_data():
     
 
     base_url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/chicago/2022-04-07/2022-10-02?unitGroup=us&include=days&key={}&contentType=json"
-    url = base_url.format(chris_umich_key)
+    url = base_url.format(chris_personal_key)
     data = requests.get(url)
     data_dict = json.loads(data.text)
-    # print(data_dict)
+
 
     cleaned_data_lst = []
     uniq_id = 1
@@ -36,7 +36,7 @@ def collect_weather_data():
         cleaned_data_lst.append(desired_data)
         uniq_id += 1
     
-    #print(cleaned_data_lst)
+
 
     return cleaned_data_lst
 
@@ -78,9 +78,11 @@ def main():
     cur.execute("SELECT max (uniq) from WeatherData")
 
     index_start = cur.fetchone()[0]
-    print(index_start)
+    
     if index_start == None:
         index_start = 0
+    if index_start == 178:
+        print("All rows are added to the Database")
     print(index_start)
 
     create_weather_table(collect_weather_data(), cur, conn, index_start)
