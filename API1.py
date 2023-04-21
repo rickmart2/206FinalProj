@@ -41,6 +41,12 @@ def setUpDb(db_name):
 
 def createMLBtab(cur, conn, lst, start):
     x = start
+    y=0
+    stadium_list = ["Wrigley Field", "Guarenteed Rate Field"]
+    for item in stadium_list:
+        cur.execute("INSERT OR IGNORE INTO stadiums (id, stadium) VALUES (?,?)", (y, item))
+        y += 1
+
     for i in lst[start: start+25]:
         home = str(i["home_score"])
         away = str(i["away_score"])
@@ -52,6 +58,8 @@ def createMLBtab(cur, conn, lst, start):
 
 def main():
     cur, conn = setUpDb('proj.db')
+    cur.execute("DROP TABLE stadiums")
+    cur.execute("CREATE TABLE IF NOT EXISTS stadiums (id NUMBER PRIMARY KEY, stadium TEXT)")
     cur.execute("CREATE TABLE IF NOT EXISTS Mlb (id NUMBER PRIMARY KEY, home_score NUMBER, away_score NUMBER, stadium NUMBER, date NUMBER)")
     cur.execute("SELECT max (id) from Mlb")
     
