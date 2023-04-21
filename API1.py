@@ -22,7 +22,10 @@ def getMLBdata():
             temp_dict["date"] = item['officialDate'].replace("-", '')
             temp_dict['away_score'] = dict(item['teams']['away'])['score']
             temp_dict['home_score'] = item['teams']['home']['score']
-            temp_dict['stadium'] = item['venue']['name']
+            if item['venue']['name'] == "Wrigley Field":
+                temp_dict['stadium'] = 0
+            else:
+                temp_dict['stadium'] = 1
         except:
             continue
         
@@ -49,7 +52,7 @@ def createMLBtab(cur, conn, lst, start):
 
 def main():
     cur, conn = setUpDb('proj.db')
-    cur.execute("CREATE TABLE IF NOT EXISTS Mlb (id NUMBER PRIMARY KEY, home_score NUMBER, away_score NUMBER, stadium TEXT, date NUMBER)")
+    cur.execute("CREATE TABLE IF NOT EXISTS Mlb (id NUMBER PRIMARY KEY, home_score NUMBER, away_score NUMBER, stadium NUMBER, date NUMBER)")
     cur.execute("SELECT max (id) from Mlb")
     
 

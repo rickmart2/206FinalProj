@@ -17,10 +17,14 @@ def main():
         f.write('Temperature, Total Score, Stadium, Run Scored per Degree')
         f.write('\n')
         for item in data:
+            if item[5] == 1:
+                stadium = "Guarenteed Rate Field"
+            else:
+                stadium = "Wrigley Field"
             total = item[3] + item[4]
             temp = item[0]
             tot_p_temp = total/temp
-            f.write(str(temp)+","+str(total)+","+item[5]+","+str(tot_p_temp))
+            f.write(str(temp)+","+str(total)+","+str(stadium)+","+str(tot_p_temp))
             f.write("\n")
 if __name__ == "__main__":
     main()
