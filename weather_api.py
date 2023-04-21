@@ -11,10 +11,11 @@ def collect_weather_data():
     chris_cdogace_key = 'NKL9WMZAUEP446Q2TAL3GX7Z5'
     chris_umich_key = 'HZMD7PY4EZMQUUSWAUL5RJX4J'
     ricky_key = 'N2SH75WGJ6F9FS7VXMN4JLRMT'
+    ricky_personal = "52PD6QVQKJMGSCW6S6GBM98EB"
     
 
     base_url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/chicago/2022-04-07/2022-10-02?unitGroup=us&include=days&key={}&contentType=json"
-    url = base_url.format(chris_personal_key)
+    url = base_url.format(ricky_personal)
     data = requests.get(url)
     data_dict = json.loads(data.text)
 

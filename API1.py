@@ -31,7 +31,7 @@ def getMLBdata():
         
         lst2.append(temp_dict)
     return lst2
-getMLBdata()
+
 
 def setUpDb(db_name):
     path = os.path.dirname(os.path.abspath(__file__))
